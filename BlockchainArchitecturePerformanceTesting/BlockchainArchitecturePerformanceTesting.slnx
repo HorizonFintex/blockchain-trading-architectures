@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="MultiThreadedAsyncSingleWallet/MultiThreadedAsyncSingleWallet.csproj" />
+  <Project Path="SequentialAsyncSingleWallet/SequentialAsyncSingleWallet.csproj" />
+  <Project Path="SequentialBlockingSingleThreaded/SequentialBlockingSingleThreaded.csproj" />
+  <Project Path="SymbolShardedLockFreeMultiWallet/SymbolShardedLockFreeMultiWallet.csproj" />
+  <Project Path="UnsynchronizedMultiThreadedMultiWallet/UnsynchronizedMultiThreadedMultiWallet.csproj" />
+</Solution>
