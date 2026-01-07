@@ -83,6 +83,14 @@ Avg Tx per Block
 111.11
 125.00
 
+### Performance Visualizations
+
+![Throughput and Time Comparison](images/stat1.png)
+
+![Latency Analysis](images/stat2.png)
+
+![Block Utilization](images/stat3.png)
+
 3. Key Findings and Architectural Conclusions
 A. The Power of Asynchronous Submission (Arch 1 $\rightarrow$ Arch 2)
 Conclusion: The initial move from synchronous waiting (Arch 1) to asynchronous submission (Arch 2) provided the most substantial performance gain, increasing throughput by over $50\times$. This step is fundamental, as it decouples the client submission thread from the lengthy blockchain mining process.
