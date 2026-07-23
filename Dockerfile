@@ -17,11 +17,20 @@ RUN dotnet build BlockchainArchitecturePerformanceTesting/BlockchainArchitecture
 FROM mcr.microsoft.com/dotnet/runtime:10.0
 WORKDIR /app
 
-# Copy compiled binaries from builder
-COPY --from=builder /src/BlockchainArchitecturePerformanceTesting/bin/Release/ ./
+# Copy compiled binaries from builder (each architecture project has its own bin directory)
+COPY --from=builder /src/BlockchainArchitecturePerformanceTesting/SequentialBlockingSingleThreaded/bin/Release/net10.0/ ./
+COPY --from=builder /src/BlockchainArchitecturePerformanceTesting/SequentialAsyncSingleWallet/bin/Release/net10.0/ ./
+COPY --from=builder /src/BlockchainArchitecturePerformanceTesting/MultiThreadedAsyncSingleWallet/bin/Release/net10.0/ ./
+COPY --from=builder /src/BlockchainArchitecturePerformanceTesting/UnsynchronizedMultiThreadedMultiWallet/bin/Release/net10.0/ ./
+COPY --from=builder /src/BlockchainArchitecturePerformanceTesting/SymbolShardedLockFreeMultiWallet/bin/Release/net10.0/ ./
 
 # Default: Run Architecture 5 (Symbol-Sharded, Lock-Free, Multi-Wallet)
-ENTRYPOINT ["dotnet", "SymbolShardedLockFreeMultiWallet/bin/Release/net10.0/SymbolShardedLockFreeMultiWallet.dll"]
+ENTRYPOINT ["dotnet", "./SymbolShardedLockFreeMultiWallet.dll"]
+
+# Alternative: Can also run other architectures by specifying:
+# docker run --rm blockchain-trading-architectures dotnet ./SequentialAsyncSingleWallet.dll
+# docker run --rm blockchain-trading-architectures dotnet ./MultiThreadedAsyncSingleWallet.dll
+# etc.
 
 # Usage:
 # docker build -t blockchain-architectures .
