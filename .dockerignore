@@ -1,0 +1,79 @@
+# Git
+.git
+.gitignore
+.gitattributes
+
+# Build artifacts
+**/bin
+**/obj
+**/Debug
+**/Release
+**/*.trx
+**/.vs
+**/.vscode
+**/project.lock.json
+**/packages
+
+# Node/npm
+node_modules
+npm-debug.log
+package-lock.json
+yarn.lock
+
+# OS
+.DS_Store
+.env
+.env.local
+Thumbs.db
+
+# Python
+__pycache__
+*.pyc
+.venv
+
+# Misc
+*.swp
+*.swo
+*~
+.sass-cache
+.tmp
+
+# Documentation (not needed in container)
+*.md
+emails/
+images/
+revisions/
+docs/
+submission/
+
+# Hardhat build artifacts (will rebuild in container)
+smart_contract/node_modules/
+smart_contract/.cache/
+smart_contract/artifacts/
+smart_contract/cache/
+smart_contract/dist/
+smart_contract/coverage/
+
+# Archive files
+*.zip
+*.tar
+*.tar.gz
+
+# Test files
+**/*.test.ts
+**/*.spec.ts
+tests/
+__tests__/
+
+# Misc
+.github/
+.env
+.env.local
+.editorconfig
+verification.txt
+QA_SUMMARY.md
+
+# Docker files themselves
+Dockerfile
+docker-compose.yml
+.dockerignore

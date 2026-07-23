@@ -8,22 +8,24 @@ Console.WriteLine("Architecture 5: Symbol-Sharded, Lock-Free, Multi-Wallet, Asyn
 Console.WriteLine("Multiple producer-consumer pairs with dedicated wallet and contract per symbol.");
 Console.WriteLine();
 
-const string rpcUrl = "http://10.41.33.100:8545";
+const string defaultRpcUrl = "http://hardhat-node:8545";
+string rpcUrl = Environment.GetEnvironmentVariable("RPC_URL") ?? defaultRpcUrl;
 const int totalTransactions = 1000;
 
 // Symbol to contract and wallet mapping - each symbol gets its own dedicated resources
+// Using Hardhat's default pre-funded accounts (hardhat node --deterministic)
 var symbolMappings = new Dictionary<string, (string contractAddress, string walletAddress)>
 {
-    { "AAPL", ("0xf55675f9ca35ed2a8740e65d474400a74f407212", "0x07954e1587f9adaf2f64a69376d2bbea60568896") },
-    { "GOOGL", ("0x8e5829931f254773d2c998c5293b1de55b190953", "0x07987db5f5990cc60702bc388ec1fdab77bcf939") },
-    { "MSFT", ("0xb16c15ba7cb84977d2dae1048b2290d3f64aac79", "0x087ff071e9be36eac002d2b4c2ef65a477fcdfde") },
-    { "AMZN", ("0x591bac57c2e2fa1be43204a574e2c4510ef57ae1", "0x098ac09ff0eb020544f425ea65bc6d61327e756b") },
-    { "TSLA", ("0x0d7353dfb52468b113345b377d786c4fcdd1c5b2", "0x0ecc4900035b7611219c04b6e1b9c836e1244a2a") },
-    { "META", ("0x9faa9c8d9a3265bb12a89580f62dd25854a637d8", "0x112e6951c7fdb311007d24e809f43e50639e47db") },
-    { "NVDA", ("0x49d06f71841059435ccd90ddb25aeea5aeba425b", "0x1228b861f152b083b8486077d39f7d8cc176be0b") },
-    { "AMD", ("0x8ebf7e98c42a68e99581e98a371d2aa54403fc1b", "0x133a64532c628f29934b351e8f24295d74e733e1") },
-    { "INTC", ("0x54432532c90b3ab8c3b9a7f46534c79f294dc5c8", "0x14b4cf60693232f389d9a5937cec9cfa5c39e340") },
-    { "NFLX", ("0x2047270f24d8750cd2df945df1a7d5523ccbf9d0", "0x186f62501b218fd3e9058df0bef0213d90938260") }
+    { "AAPL", ("0xf55675f9ca35ed2a8740e65d474400a74f407212", "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266") },
+    { "GOOGL", ("0x8e5829931f254773d2c998c5293b1de55b190953", "0x70997970C51812e339D9B73b0245ad59418f0Be6") },
+    { "MSFT", ("0xb16c15ba7cb84977d2dae1048b2290d3f64aac79", "0x3C44CdDdB6a900c6671B362411dDF9B0eB3D48b7") },
+    { "AMZN", ("0x591bac57c2e2fa1be43204a574e2c4510ef57ae1", "0x90F79bf6EB2c4f870365E785982E1f101E93b906") },
+    { "TSLA", ("0x0d7353dfb52468b113345b377d786c4fcdd1c5b2", "0x15d34AAf54267DB7D7c367839AAf71A00a2C6A65") },
+    { "META", ("0x9faa9c8d9a3265bb12a89580f62dd25854a637d8", "0x1CBd3b2770909D4e10f157cABC84C7264073C9Ec") },
+    { "NVDA", ("0x49d06f71841059435ccd90ddb25aeea5aeba425b", "0x0D46e8753033f45337EA0887d3d60f01B9F2a88e") },
+    { "AMD", ("0x8ebf7e98c42a68e99581e98a371d2aa54403fc1b", "0xCD2a3d9F938E13CD947Ec05AbC7FE734Df8DD826") },
+    { "INTC", ("0x54432532c90b3ab8c3b9a7f46534c79f294dc5c8", "0x2546BcD3c84621e976D8185a91A922aE77ECEc30") },
+    { "NFLX", ("0x2047270f24d8750cd2df945df1a7d5523ccbf9d0", "0xBcd4042DE499d14e55001CcbB24a551F3b954096") }
 };
 
 // Each symbol gets its own HttpClient to eliminate any shared resource contention

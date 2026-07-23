@@ -10,7 +10,8 @@ Console.WriteLine("=== Sequential Blocking Single-Threaded Blockchain Test ===")
 Console.WriteLine("Architecture 1: Sequential, Synchronous, Single-Wallet (Baseline)");
 Console.WriteLine();
 
-const string rpcUrl = "http://10.41.33.100:8545";
+const string defaultRpcUrl = "http://hardhat-node:8545";
+string rpcUrl = Environment.GetEnvironmentVariable("RPC_URL") ?? defaultRpcUrl;
 const string contractAddress = "0xf4d4FF384b81B1a6041537C14D37A35a698ecAEc";
 const int totalTransactions = 1000;
 

@@ -416,3 +416,28 @@ FodyWeavers.xsd
 *.msix
 *.msm
 *.msp
+
+# LaTeX project files (excluded from artifact repository)
+# These are managed separately and not part of the reproducible artifact
+*.tex
+*.pdf
+*.aux
+*.log
+*.out
+*.toc
+*.synctex.gz
+*.bbl
+*.blg
+*.fls
+*.fdb_latexmk
+*.xdv
+ECSA2026-conference-info.md
+Comprehensive*.md
+Critique*.md
+De-LLM*.md
+# Exclude the LaTeX project directory entirely
+/emails/
+/images/
+/presentation/
+/revisions/
+/sources/

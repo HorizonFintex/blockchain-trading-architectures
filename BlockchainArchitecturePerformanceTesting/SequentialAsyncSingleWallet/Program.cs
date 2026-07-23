@@ -11,7 +11,8 @@ Console.WriteLine("Architecture 2: Sequential, Asynchronous, Single-Wallet");
 Console.WriteLine("Single submission thread; separate thread polls for mined transactions.");
 Console.WriteLine();
 
-const string rpcUrl = "http://10.41.33.100:8545";
+const string defaultRpcUrl = "http://hardhat-node:8545";
+string rpcUrl = Environment.GetEnvironmentVariable("RPC_URL") ?? defaultRpcUrl;
 const string contractAddress = "0xf4d4FF384b81B1a6041537C14D37A35a698ecAEc";
 //const string contractAddress = "0x1cD19F8b0b2503814980b60b31ff5278882F59fF";
 const int totalTransactions = 1000;

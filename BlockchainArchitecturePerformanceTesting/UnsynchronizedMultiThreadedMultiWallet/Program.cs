@@ -8,7 +8,8 @@ Console.WriteLine("Architecture 4: Unsynchronized Multi-Threaded, Multi-Wallet")
 Console.WriteLine("Single producer-consumer pair with intelligent wallet-contract-symbol routing.");
 Console.WriteLine();
 
-const string rpcUrl = "http://10.41.33.100:8545";
+const string defaultRpcUrl = "http://hardhat-node:8545";
+string rpcUrl = Environment.GetEnvironmentVariable("RPC_URL") ?? defaultRpcUrl;
 const int totalTransactions = 1000;
 const string completionSignal = "COMPLETE";
 

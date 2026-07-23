@@ -1,0 +1,131 @@
+version: '3.8'
+
+services:
+  # Hardhat Local Blockchain Node (provides RPC endpoint)
+  hardhat-node:
+    image: node:20-alpine
+    container_name: blockchain-hardhat-node
+    working_dir: /app
+    volumes:
+      - ./smart_contract:/app
+      - /app/node_modules
+    ports:
+      - "8545:8545"
+    entrypoint: sh -c "npm install && npx hardhat node --hostname 0.0.0.0 --port 8545"
+    environment:
+      - NODE_ENV=development
+    healthcheck:
+      test: ["CMD", "sh", "-c", "test $(date +%s) -gt 0"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 25s
+    networks:
+      - blockchain
+
+  # Architecture 1: Sequential, Synchronous, Single-Wallet (Baseline)
+  arch1-sequential-blocking:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: blockchain-arch1-baseline
+    volumes:
+      - ./results:/app/results
+    entrypoint: "dotnet ./SequentialBlockingSingleThreaded.dll"
+    environment:
+      - TRANSACTIONS=1000
+      - OUTPUT_DIR=/app/results
+      - RPC_URL=http://hardhat-node:8545
+    depends_on:
+      hardhat-node:
+        condition: service_healthy
+    networks:
+      - blockchain
+
+  # Architecture 2: Sequential, Asynchronous, Single-Wallet
+  arch2-sequential-async:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: blockchain-arch2-async-single
+    volumes:
+      - ./results:/app/results
+    entrypoint: "dotnet ./SequentialAsyncSingleWallet.dll"
+    environment:
+      - TRANSACTIONS=1000
+      - OUTPUT_DIR=/app/results
+      - RPC_URL=http://hardhat-node:8545
+    depends_on:
+      hardhat-node:
+        condition: service_healthy
+    networks:
+      - blockchain
+
+  # Architecture 3: Multi-Threaded, Asynchronous, Single-Wallet
+  arch3-multithreaded-async:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: blockchain-arch3-multithreaded
+    volumes:
+      - ./results:/app/results
+    entrypoint: "dotnet ./MultiThreadedAsyncSingleWallet.dll"
+    environment:
+      - TRANSACTIONS=1000
+      - OUTPUT_DIR=/app/results
+      - RPC_URL=http://hardhat-node:8545
+    depends_on:
+      hardhat-node:
+        condition: service_healthy
+    networks:
+      - blockchain
+
+  # Architecture 4: Unsynchronized Multi-Threaded, Multi-Wallet
+  arch4-unsync-multithread:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: blockchain-arch4-multiwallet
+    volumes:
+      - ./results:/app/results
+    entrypoint: "dotnet ./UnsynchronizedMultiThreadedMultiWallet.dll"
+    environment:
+      - TRANSACTIONS=1000
+      - OUTPUT_DIR=/app/results
+      - RPC_URL=http://hardhat-node:8545
+    depends_on:
+      hardhat-node:
+        condition: service_healthy
+    networks:
+      - blockchain
+
+  # Architecture 5: Symbol-Sharded, Lock-Free, Multi-Wallet (Proposed)
+  arch5-symbol-sharded:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: blockchain-arch5-optimized
+    volumes:
+      - ./results:/app/results
+    entrypoint: "dotnet ./SymbolShardedLockFreeMultiWallet.dll"
+    environment:
+      - TRANSACTIONS=1000
+      - OUTPUT_DIR=/app/results
+      - RPC_URL=http://hardhat-node:8545
+    depends_on:
+      hardhat-node:
+        condition: service_healthy
+    networks:
+      - blockchain
+
+networks:
+  blockchain:
+    driver: bridge
+
+# Usage:
+# docker-compose up                    # Start Hardhat node first
+# docker-compose run arch5-symbol-sharded  # Run Architecture 5 (waits for Hardhat)
+# docker-compose up hardhat-node       # Just run the blockchain node (useful for manual testing)
+# 
+# All architectures will wait for Hardhat to be healthy before starting
+# RPC endpoint is automatically configured via RPC_URL environment variable

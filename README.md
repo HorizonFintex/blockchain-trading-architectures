@@ -1,6 +1,38 @@
 # blockchain-trading-architectures
 Proof of concept scenarios for lock free non blocking architectures for blockchain trading systems
 
+## Quick Start - Docker (Recommended)
+
+**Prerequisites:** Docker Desktop installed
+
+**One-Command Reproducible Setup:**
+```bash
+# Terminal 1: Start Hardhat blockchain node
+docker compose up hardhat-node
+
+# Terminal 2: Run Architecture 5 (Symbol-Sharded Lock-Free)
+docker compose run arch5-symbol-sharded
+```
+
+**What happens:**
+- Hardhat starts a local Ethereum node with 20 pre-funded accounts
+- Architecture 5 automatically connects and processes 1000 transactions
+- Results printed to console showing throughput metrics (~300 tx/sec)
+- Output includes per-symbol statistics, gas usage, and timing data
+
+**All architectures available:**
+```bash
+docker compose run arch1-sequential-blocking      # Baseline
+docker compose run arch2-sequential-async        # Sequential async
+docker compose run arch3-multithreaded-async     # Multi-threaded single wallet
+docker compose run arch4-unsync-multithread      # Multi-wallet unsync
+docker compose run arch5-symbol-sharded          # Optimized (lock-free)
+```
+
+**Details:** See [docker/README.md](docker/README.md) for full Docker workflow documentation.
+
+---
+
 I have just tested 5 architectures for processing trades in a blockchain backed trading system:
 
 

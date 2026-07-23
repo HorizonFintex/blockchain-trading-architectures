@@ -8,7 +8,8 @@ Console.WriteLine("Architecture 3: Multi-Threaded, Asynchronous, Single-Wallet")
 Console.WriteLine("Multiple concurrent threads submit asynchronously to a single blockchain wallet.");
 Console.WriteLine();
 
-const string rpcUrl = "http://10.41.33.100:8545";
+const string defaultRpcUrl = "http://hardhat-node:8545";
+string rpcUrl = Environment.GetEnvironmentVariable("RPC_URL") ?? defaultRpcUrl;
 const int totalTransactions = 1000;
 const int submissionDelayMs = 500; // Increased from 100ms to 500ms to reduce nonce conflicts with 10 concurrent threads
 
